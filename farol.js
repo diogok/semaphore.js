@@ -4,22 +4,6 @@ var farol = function(options) {
     var green = "darkgreen";
     var yellow = 'goldenrod';
     
-    var light = document.createElement("div");
-    light.class = "x-farol-light";
-    light.style.width="20px";
-    light.style.height='20px';
-    light.style.backgroundColor=red;
-    light.style.borderRadius="15px";
-    light.style.float="left";
-
-    var text = document.createElement("div");
-    text.innerHTML="OFFLINE";
-    text.class = "x-farol-text";
-    text.style.float="right";
-    text.style.color=red;
-    text.style.fontFamily='Verdana';
-    text.style.fontSize="16px";
-    
     var div = document.createElement("div");
     div.class= "x-farol";
     div.style.width="92px";
@@ -32,10 +16,23 @@ var farol = function(options) {
     div.style.top="12px";
     div.style.right="12px";
 
-    document.body.appendChild(div);
+    var light = document.createElement("div");
+    light.class = "x-farol-light";
+    light.style.width="20px";
+    light.style.height='20px';
+    light.style.backgroundColor=red;
+    light.style.borderRadius="15px";
+    light.style.float="left";
     div.appendChild(light);
-    div.appendChild(text);
 
+    var text = document.createElement("div");
+    text.innerHTML="OFFLINE";
+    text.class = "x-farol-text";
+    text.style.float="right";
+    text.style.color=red;
+    text.style.fontFamily='Verdana';
+    text.style.fontSize="16px";
+    div.appendChild(text);
 
     function setRed() {
         text.innerHTML = "OFFLINE";
@@ -69,16 +66,22 @@ var farol = function(options) {
         };
         req.send(null);
         setTimeout(function(){
-                if(req.readyState != 4) {
-                    req.abort();
-                    setYellow();
-                }
-            },opts.timeout);
+            if(req.readyState != 4) {
+                setYellow();
+            }
+        },opts.timealert);
+        setTimeout(function(){
+            if(req.readyState != 4) {
+                req.abort();
+                setRed();
+            }
+        },opts.timeout);
     }
 
     var opts = {
         interval: 5000,
-        timeout: 10000
+        timeout: 10000,
+        timealert: 5000,
     };
 
     if(typeof options == "object"){
@@ -87,7 +90,18 @@ var farol = function(options) {
         }
     }
 
+    if(typeof opts.url != "string") {
+        throw "Must provide a URL to test server state.";
+    }
+
+    var base = document.body;
+    if(typeof opts.element == "string") {
+        base = document.getElementById(opts.element);
+    }
+    base.appendChild(div);
+
     check(opts);
     setInterval(function(){ check(opts) }, opts.interval);
 
 }
+
