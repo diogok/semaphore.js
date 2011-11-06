@@ -42,4 +42,5 @@ Semaphore allow a few more options:
 - **offlineColor** color to display if server is down
 - **slowColor** color to display if server is slow
 
-By @diogok
+You can also style the semaphore using css (but with important statement, for now) all under .x-semaphore class.
+

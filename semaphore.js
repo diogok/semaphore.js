@@ -22,7 +22,7 @@ var semaphore = function(options) {
     }
 
     var div = document.createElement("div");
-    div.class= "x-farol";
+    div.className = "x-semaphore";
     div.style.width="92px";
     div.style.height='20px';
     div.style.padding='5px';
@@ -34,7 +34,7 @@ var semaphore = function(options) {
     div.style.right="12px";
 
     var light = document.createElement("div");
-    light.class = "x-farol-light";
+    light.className = "x-semaphore-light";
     light.style.width="20px";
     light.style.height='20px';
     light.style.backgroundColor=opts.offlineColor;
@@ -44,7 +44,7 @@ var semaphore = function(options) {
 
     var text = document.createElement("div");
     text.innerHTML=opts.offlineText;
-    text.class = "x-farol-text";
+    text.className = "x-semaphore-text";
     text.style.float="right";
     text.style.color=opts.offlineColor;
     text.style.fontFamily='Verdana';
