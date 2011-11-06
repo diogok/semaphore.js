@@ -1,4 +1,4 @@
-var farol = function(options) {
+var semaphore = function(options) {
     if(typeof options.url != "string") throw "Must provide a URL to test server state.";
 
     var running = false;
