@@ -1,4 +1,7 @@
 var farol = function(options) {
+    if(typeof options.url != "string") throw "Must provide a URL to test server state.";
+
+    var running = false;
 
     var red = "darkred";
     var green = "darkgreen";
@@ -52,46 +55,61 @@ var farol = function(options) {
         light.style.backgroundColor = green;
     }
 
+    function fire(event,req,opts) {
+        if(req.readyState == 4 || req.readyState == 0) running = false;
+        var evt = "on"+event;
+        if(typeof opts[evt] == "function") {
+            var fn = opts[evt];
+            fn(req.response);
+        }
+    }
+
+    function checkTimes(req,opts) {
+        setTimeout(function(){
+            if(req.readyState != 4) {
+                setYellow();
+                fire("timealert",req,opts);
+            }
+        },opts.timealert);
+
+        setTimeout(function(){
+            if(req.readyState != 4) {
+                req.abort();
+                setRed();
+                fire("timeout",req,opts);
+            }
+        },opts.timeout);
+    }
 
     function check(opts) {
+        if(running) return;
+        running = true;
         var req = new XMLHttpRequest() ;
         req.open("GET",opts.url,true);
         req.onreadystatechange = function () {
             if (req.readyState != 4) return;
             if (req.status == 200 && req.response == "ok") {
                 setGreen();
+                fire("success",req,opts);
             } else {
                 setRed();
+                fire("error",req,opts);
             }
         };
+        checkTimes(req,opts);
         req.send(null);
-        setTimeout(function(){
-            if(req.readyState != 4) {
-                setYellow();
-            }
-        },opts.timealert);
-        setTimeout(function(){
-            if(req.readyState != 4) {
-                req.abort();
-                setRed();
-            }
-        },opts.timeout);
     }
 
     var opts = {
         interval: 5000,
         timeout: 10000,
-        timealert: 5000,
+        timealert: 5000
     };
 
     if(typeof options == "object"){
         for(var i in options) {
             opts[i] = options[i];
         }
-    }
-
-    if(typeof opts.url != "string") {
-        throw "Must provide a URL to test server state.";
     }
 
     var base = document.body;
