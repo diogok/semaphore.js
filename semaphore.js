@@ -3,10 +3,24 @@ var semaphore = function(options) {
 
     var running = false;
 
-    var red = "darkred";
-    var green = "darkgreen";
-    var yellow = 'goldenrod';
-    
+    var opts = {
+        interval: 5000,
+        timeout: 10000,
+        timealert: 5000,
+        onlineText: "ONLINE",
+        offlineText: "OFFLINE",
+        slowText: "SLOW",
+        onlineColor: "darkgreen",
+        offlineColor: "darkred",
+        slowColor: "goldenrod"
+    };
+
+    if(typeof options == "object"){
+        for(var i in options) {
+            opts[i] = options[i];
+        }
+    }
+
     var div = document.createElement("div");
     div.class= "x-farol";
     div.style.width="92px";
@@ -23,39 +37,43 @@ var semaphore = function(options) {
     light.class = "x-farol-light";
     light.style.width="20px";
     light.style.height='20px';
-    light.style.backgroundColor=red;
+    light.style.backgroundColor=opts.offlineColor;
     light.style.borderRadius="15px";
     light.style.float="left";
     div.appendChild(light);
 
     var text = document.createElement("div");
-    text.innerHTML="OFFLINE";
+    text.innerHTML=opts.offlineText;
     text.class = "x-farol-text";
     text.style.float="right";
-    text.style.color=red;
+    text.style.color=opts.offlineColor;
     text.style.fontFamily='Verdana';
     text.style.fontSize="16px";
     div.appendChild(text);
 
+    var base = document.body;
+    if(typeof opts.element == "string") base = document.getElementById(opts.element);
+    base.appendChild(div);
+
     function setRed() {
-        text.innerHTML = "OFFLINE";
-        text.style.color = red;
-        light.style.backgroundColor = red;
+        text.innerHTML = opts.offlineText;
+        text.style.color = opts.offlineColor;
+        light.style.backgroundColor = opts.offlineColor;
     }
 
     function setYellow() {
-        text.innerHTML = "SLOW";
-        text.style.color = yellow;
-        light.style.backgroundColor = yellow;
+        text.innerHTML = opts.slowText;
+        text.style.color = opts.slowColor;
+        light.style.backgroundColor = opts.slowColor;
     }
 
     function setGreen() {
-        text.innerHTML = "ONLINE";
-        text.style.color = green;
-        light.style.backgroundColor = green;
+        text.innerHTML = opts.onlineText;
+        text.style.color = opts.onlineColor;
+        light.style.backgroundColor = opts.onlineColor;
     }
 
-    function fire(event,req,opts) {
+    function fire(event,req) {
         if(req.readyState == 4 || req.readyState == 0) running = false;
         var evt = "on"+event;
         if(typeof opts[evt] == "function") {
@@ -64,7 +82,7 @@ var semaphore = function(options) {
         }
     }
 
-    function checkTimes(req,opts) {
+    function checkTimes(req) {
         setTimeout(function(){
             if(req.readyState != 4) {
                 setYellow();
@@ -81,7 +99,7 @@ var semaphore = function(options) {
         },opts.timeout);
     }
 
-    function check(opts) {
+    function check() {
         if(running) return;
         running = true;
         var req = new XMLHttpRequest() ;
@@ -99,24 +117,6 @@ var semaphore = function(options) {
         checkTimes(req,opts);
         req.send(null);
     }
-
-    var opts = {
-        interval: 5000,
-        timeout: 10000,
-        timealert: 5000
-    };
-
-    if(typeof options == "object"){
-        for(var i in options) {
-            opts[i] = options[i];
-        }
-    }
-
-    var base = document.body;
-    if(typeof opts.element == "string") {
-        base = document.getElementById(opts.element);
-    }
-    base.appendChild(div);
 
     check(opts);
     setInterval(function(){ check(opts) }, opts.interval);

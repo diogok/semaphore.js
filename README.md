@@ -24,8 +24,6 @@ If everything is fine the URL must respond to a GET with a 200 status code and j
 
 You can test your connection to the database, access third-party services or any other test that your app need to run.
 
-You can also define custom handlers for errors/success/timeouts, see below.
-
 ## Options
 
 Semaphore allow a few more options:
@@ -37,4 +35,11 @@ Semaphore allow a few more options:
 - **onsuccess** a function to be called when server returns with success
 - **ontimeout** a function to be called on timeout
 - **ontimealer** a function to be called on slow responses, but no error yet
+- **onlineText** text to display if server is online
+- **offlineText** text to display if server is down
+- **slowText** text to display if server is slow
+- **onlineColor** color to display if server is online
+- **offlineColor** color to display if server is down
+- **slowColor** color to display if server is slow
 
+By @diogok
