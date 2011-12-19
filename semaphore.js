@@ -24,7 +24,7 @@ var semaphore = function(options) {
     var div = document.createElement("div");
     div.className = "x-semaphore";
     div.style.width="98px";
-    div.style.height='20px';
+    div.style.height='45px';
     div.style.padding='5px';
     div.style.backgroundColor="#fff";
     div.style.border="1px #aaa solid";
@@ -122,4 +122,3 @@ var semaphore = function(options) {
     setInterval(function(){ check(opts) }, opts.interval);
 
 }
-
