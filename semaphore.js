@@ -23,12 +23,12 @@ var semaphore = function(options) {
 
     var div = document.createElement("div");
     div.className = "x-semaphore";
-    div.style.width="92px";
+    div.style.width="98px";
     div.style.height='20px';
     div.style.padding='5px';
     div.style.backgroundColor="#fff";
     div.style.border="1px #aaa solid";
-    div.style.position="absolute";
+    div.style.position="fixed";
     div.style.zIndex="10";
     div.style.top="12px";
     div.style.right="12px";
