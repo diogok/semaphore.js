@@ -23,8 +23,9 @@ var semaphore = function(options) {
 
     var div = document.createElement("div");
     div.className = "x-semaphore";
-    div.style.width="98px";
-    div.style.height='45px';
+    div.style.display="block";
+    div.style.width="110px";
+    div.style.height='22px';
     div.style.padding='5px';
     div.style.backgroundColor="#fff";
     div.style.border="1px #aaa solid";
@@ -36,16 +37,21 @@ var semaphore = function(options) {
     var light = document.createElement("div");
     light.className = "x-semaphore-light";
     light.style.width="20px";
-    light.style.height='20px';
+    light.style.height="20px";
     light.style.backgroundColor=opts.offlineColor;
     light.style.borderRadius="15px";
     light.style.float="left";
+    light.style.cssFloat="left";
     div.appendChild(light);
 
     var text = document.createElement("div");
     text.innerHTML=opts.offlineText;
     text.className = "x-semaphore-text";
-    text.style.float="right";
+    text.style.display="block";
+    text.style.float="left";
+    text.style.cssFloat="left";
+    text.style.width="80px";
+    text.style.marginLeft="10px";
     text.style.color=opts.offlineColor;
     text.style.fontFamily='Verdana';
     text.style.fontSize="16px";
